@@ -1,18 +1,7 @@
 const MODEL = {
     numCats: 3,
     catLocations: [["06", "16", "26"], ["24", "34", "44"], ["10", "11", "12"]],
-    catImages: [
-        "img/1.png",
-        "img/2.png",
-        "img/3.png",
-        "img/4.png",
-        "img/5.png",
-        "img/6.png",
-        "img/7.png",
-        "img/8.png",
-        "img/9.png",
-        "img/10.png"
-    ],
+    excludedCatImages: [],
     clickOnCell: function (tag, cellId) {
         for (let i = 0; i < this.numCats; i++) {
             const index = this.catLocations[i].indexOf(cellId);
@@ -22,6 +11,15 @@ const MODEL = {
         }
         return tag.setAttribute("class", "miss");
     },
+    getRandomImage: function () {
+        // choosing random name of images from 1.png to 10.png
+        const randNum = Math.floor(Math.random() * 9 + 1);
+        if (this.excludedCatImages.indexOf(randNum) === -1) {
+            this.excludedCatImages.push(randNum);
+            return `url(img/${randNum}.png)`;
+        }
+        return null;
+    },
     changeImageOnClick: function () {
         const self = this;
         const tds = document.querySelectorAll("td");
@@ -29,9 +27,7 @@ const MODEL = {
             td.onclick = function () {
                 self.clickOnCell(td, td.id);
                 if (td.classList.contains("hit")) {
-                    const catIndex = Math.floor(Math.random() * self.catImages.length - 1);
-                    td.style.backgroundImage = 'url(' + self.catImages[catIndex] + ')';
-                    self.catImages.splice(catIndex, 1);
+                    td.style.backgroundImage = self.getRandomImage();
                 } else {
                     td.style.backgroundColor = '#8e381e';
                 }
