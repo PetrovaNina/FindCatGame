@@ -1,0 +1,28 @@
+body {
+    background-color: sandybrown;
+}
+div#board {
+    position: relative;
+    margin: auto;
+}
+
+table {
+    margin: auto auto;
+    border-collapse: collapse;
+    background-color: chocolate;
+}
+table:hover {
+    cursor: url("img/loupe.png"), pointer;
+}
+td {
+    width: 80px;
+    height: 80px;
+    border: 2px solid black;
+}
+
+.hit  {
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 90% auto;
+    background-color: #8e381e;
+}
