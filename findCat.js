@@ -1,6 +1,6 @@
-let numCats =  3;
-let catLocations = [ ["06", "16", "26"], ["24", "34", "44"], ["10", "11", "12"] ];
-let imgs = [
+const NUM_CATS = 3;
+const CAT_LOCATIONS = [["06", "16", "26"], ["24", "34", "44"], ["10", "11", "12"]];
+const IMGS = [
     "img/1.png",
     "img/2.png",
     "img/3.png",
@@ -13,9 +13,9 @@ let imgs = [
     "img/10.png"
 ];
 
-function click (tag, guess) {
-    for (let i = 0; i < numCats; i++) {
-        let index = catLocations[i].indexOf(guess);
+function click(tag, guess) {
+    for (let i = 0; i < NUM_CATS; i++) {
+        const index = CAT_LOCATIONS[i].indexOf(guess);
         if (index >= 0) {
             return tag.setAttribute("class", "hit");
         }
@@ -28,15 +28,15 @@ function getRandomInt(max) {
 }
 
 
-let tds = document.querySelectorAll("td");
+const TDS = document.querySelectorAll("td");
 
-for (let td of tds) {
+for (const td of TDS) {
     td.onclick = function () {
         console.log(click(td, td.id));
         if (td.classList.contains("hit")) {
-            let catIndex = getRandomInt(imgs.length - 1);
-            td.style.backgroundImage = 'url(' + imgs[catIndex] + ')';
-            imgs.splice(catIndex, 1);
+            let catIndex = getRandomInt(IMGS.length - 1);
+            td.style.backgroundImage = 'url(' + IMGS[catIndex] + ')';
+            IMGS.splice(catIndex, 1);
         } else {
             td.style.backgroundColor = '#8e381e';
         }
