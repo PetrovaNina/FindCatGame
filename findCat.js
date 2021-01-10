@@ -1,16 +1,26 @@
 const MODEL = {
     numCats: 3,
-    catLocations: [["06", "16", "26", "36", "46", "56"], ["24", "34", "44"], ["10", "11", "12"]],
+    cats: [{locations: ["06", "16", "26"], hits: ["", "", ""]},
+        {locations: ["24", "34", "44"], hits: ["", "", ""]},
+        {locations: ["10", "11", "12"], hits: ["", "", ""]}],
+    catFound: 0,
+    catBoxLength: 3,
     imageName: 0,
     clickOnCell: function (tag) {
         if (tag.classList.contains("hit") || tag.classList.contains("miss")) {
             return;
         }
         for (let i = 0; i < this.numCats; i++) {
-            const index = this.catLocations[i].indexOf(tag.id);
+            const cat = this.cats[i];
+            const index = cat.locations.indexOf(tag.id);
             if (index >= 0) {
+                cat.hits[index] = "hit"
                 tag.style.backgroundImage = this.getImage();
                 tag.setAttribute("class", "hit");
+                if (this.isFound(cat)) {
+                    this.catFound++;
+                }
+                console.log(this.isFound(cat))
                 return;
             }
         }
@@ -33,10 +43,18 @@ const MODEL = {
         for (const td of tds) {
             td.onclick = function () {
                 self.clickOnCell(td);
-                console.log(self.imageName)
             }
         }
-    }
+    },
+
+    isFound: function (cat) {
+        for (let i = 0; i < this.catBoxLength; i++) {
+            if (cat.hits[i] !== "hit") {
+                return false;
+            }
+        }
+        return true;
+    },
 };
 
 MODEL.changeImageOnClick();
