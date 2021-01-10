@@ -18,13 +18,17 @@ const MODEL = {
     },
 
     getRandomImage: function () {
-        // choosing random name of images from 1.png to 10.png
-        const randNum = Math.floor(Math.random() * 9 + 1);
-        if (this.excludedCatImages.indexOf(randNum) === -1) {
-            this.excludedCatImages.push(randNum);
-            return `url(img/${randNum}.png)`;
+        if (this.excludedCatImages.length === 10) {
+            this.excludedCatImages = [];
         }
-        return null;
+        // choosing random name of images from 1.png to 10.png
+        let randNum
+        do {
+            randNum = Math.floor(Math.random() * 9.4 + 1);
+        } while (this.excludedCatImages.indexOf(randNum) !== -1);
+
+        this.excludedCatImages.push(randNum);
+        return `url(img/${randNum}.png)`;
     },
 
     changeImageOnClick: function () {
