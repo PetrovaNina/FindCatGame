@@ -19,7 +19,7 @@ const MODEL = {
                 if (this.isFound(cat)) {
                     this.catFound++;
                 }
-                console.log(this.isFound(cat))
+                console.log(CONTROLLER.guesses, CONTROLLER.maxGuesses(CONTROLLER.guesses))
                 return;
             }
         }
@@ -53,11 +53,20 @@ const VIEW = {
         for (const td of tds) {
             td.onclick = function () {
                 MODEL.openCell(td);
+                CONTROLLER.processGuess()
             }
         }
     },
 };
 
-const CONTROLLER = {};
+const CONTROLLER = {
+    guesses: 1,
+    maxGuesses: function () {
+        return Math.ceil((MODEL.numCats * MODEL.catBoxLength) * 1.5);
+    },
+    processGuess: function () {
+        this.guesses++;
+    }
+};
 
 VIEW.changeImageOnClick();
