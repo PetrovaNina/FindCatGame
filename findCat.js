@@ -5,8 +5,7 @@ const MODEL = {
         {locations: ["10", "11", "12"], hits: ["", "", ""]}],
     catFound: 0,
     catBoxLength: 3,
-    imageName: 0,
-    clickOnCell: function (tag) {
+    openCell: function (tag) {
         if (tag.classList.contains("hit") || tag.classList.contains("miss")) {
             return;
         }
@@ -15,7 +14,7 @@ const MODEL = {
             const index = cat.locations.indexOf(tag.id);
             if (index >= 0) {
                 cat.hits[index] = "hit"
-                tag.style.backgroundImage = this.getImage();
+                tag.style.backgroundImage = VIEW.getImage();
                 tag.setAttribute("class", "hit");
                 if (this.isFound(cat)) {
                     this.catFound++;
@@ -26,7 +25,19 @@ const MODEL = {
         }
         tag.setAttribute("class", "miss");
     },
+    isFound: function (cat) {
+        for (let i = 0; i < this.catBoxLength; i++) {
+            if (cat.hits[i] !== "hit") {
+                return false;
+            }
+        }
+        return true;
+    },
+};
 
+const VIEW = {
+
+    imageName: 0,
     getImage: function () {
         if (this.imageName === 10) {
             this.imageName = 0;
@@ -38,23 +49,15 @@ const MODEL = {
     },
 
     changeImageOnClick: function () {
-        const self = this;
         const tds = document.querySelectorAll("td");
         for (const td of tds) {
             td.onclick = function () {
-                self.clickOnCell(td);
+                MODEL.openCell(td);
             }
         }
-    },
-
-    isFound: function (cat) {
-        for (let i = 0; i < this.catBoxLength; i++) {
-            if (cat.hits[i] !== "hit") {
-                return false;
-            }
-        }
-        return true;
     },
 };
 
-MODEL.changeImageOnClick();
+const CONTROLLER = {};
+
+VIEW.changeImageOnClick();
