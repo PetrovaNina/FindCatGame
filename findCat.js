@@ -1,37 +1,48 @@
 const MODEL = {
-    numCats: 3,
+    catBoxNum: 3,
+    catBoxLength: 3,
     cats: [{locations: ["06", "16", "26"], hits: ["", "", ""]},
         {locations: ["24", "34", "44"], hits: ["", "", ""]},
         {locations: ["10", "11", "12"], hits: ["", "", ""]}],
-    catFound: 0,
-    catBoxLength: 3,
+    catBoxFound: 0,
     openCell: function (tag) {
-        if (tag.classList.contains("hit") || tag.classList.contains("miss")) {
+
+        if (tag.classList.contains("hit") || tag.classList.contains("miss") || this.isGameOver()) {
             return;
         }
-        for (let i = 0; i < this.numCats; i++) {
+        CONTROLLER.processGuess();
+        VIEW.displayGuesses();
+
+        for (let i = 0; i < this.catBoxNum; i++) {
             const cat = this.cats[i];
             const index = cat.locations.indexOf(tag.id);
             if (index >= 0) {
                 cat.hits[index] = "hit"
                 tag.style.backgroundImage = VIEW.getImage();
                 tag.setAttribute("class", "hit");
-                if (this.isFound(cat)) {
-                    this.catFound++;
+                if (this.isBoxFound(cat)) {
+                    this.catBoxFound++;
+                    VIEW.displayBoxes();
                 }
-                console.log(CONTROLLER.guesses, CONTROLLER.maxGuesses(CONTROLLER.guesses))
+                this.isGameOver();
                 return;
             }
         }
         tag.setAttribute("class", "miss");
+        if (this.isGameOver()) {
+            VIEW.displayResult();
+        }
     },
-    isFound: function (cat) {
+    isBoxFound: function (cat) {
         for (let i = 0; i < this.catBoxLength; i++) {
             if (cat.hits[i] !== "hit") {
                 return false;
             }
         }
         return true;
+    },
+    isGameOver: function () {
+        return this.catBoxFound === this.catBoxNum || CONTROLLER.guesses === CONTROLLER.maxGuesses();
     },
 };
 
@@ -53,20 +64,36 @@ const VIEW = {
         for (const td of tds) {
             td.onclick = function () {
                 MODEL.openCell(td);
-                CONTROLLER.processGuess()
             }
         }
+    },
+
+    // Now the messages are printing in console.
+    // Next step they will be displayed in main page.
+    displayGuesses: function () {
+        console.log(`Попытки: ${CONTROLLER.guesses} из ${CONTROLLER.maxGuesses()}`);
+    },
+    displayBoxes: function () {
+        console.log(`Коробки: ${MODEL.catBoxFound} из ${MODEL.catBoxNum}`);
+    },
+    displayResult: function () {
+        if (MODEL.catBoxFound === MODEL.catBoxNum && CONTROLLER.guesses <= CONTROLLER.maxGuesses()) {
+            console.log("Победа!");
+        }
+        console.log("Упс... Тебя обыграли!");
     },
 };
 
 const CONTROLLER = {
-    guesses: 1,
+    guesses: 0,
     maxGuesses: function () {
-        return Math.ceil((MODEL.numCats * MODEL.catBoxLength) * 1.5);
+        return Math.ceil((MODEL.catBoxNum * MODEL.catBoxLength) * 1.5);
     },
     processGuess: function () {
-        this.guesses++;
-    }
+        do {
+            this.guesses++;
+        } while (this.guesses > this.maxGuesses());
+    },
 };
 
 VIEW.changeImageOnClick();
