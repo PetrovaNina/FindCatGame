@@ -1,69 +1,27 @@
-const MODEL = {
-    catBoxNum: 3,
-    catBoxLength: 3,
-    cats: [{locations: ["06", "16", "26"], hits: ["", "", ""]},
-        {locations: ["24", "34", "44"], hits: ["", "", ""]},
-        {locations: ["10", "11", "12"], hits: ["", "", ""]}],
-    catBoxFound: 0,
-    openCell: function (tag) {
-
-        if (tag.classList.contains("hit") || tag.classList.contains("miss") || this.isGameOver()) {
-            return;
-        }
-        CONTROLLER.processGuess();
-        VIEW.displayGuesses();
-
-        for (let i = 0; i < this.catBoxNum; i++) {
-            const cat = this.cats[i];
-            const index = cat.locations.indexOf(tag.id);
-            if (index >= 0) {
-                cat.hits[index] = "hit"
-                tag.style.backgroundImage = VIEW.getImage();
-                tag.setAttribute("class", "hit");
-                if (this.isBoxFound(cat)) {
-                    this.catBoxFound++;
-                    VIEW.displayBoxes();
-                }
-                this.isGameOver();
-                return;
-            }
-        }
-        tag.setAttribute("class", "miss");
-        if (this.isGameOver()) {
-            VIEW.displayResult();
-        }
-    },
-    isBoxFound: function (cat) {
-        for (let i = 0; i < this.catBoxLength; i++) {
-            if (cat.hits[i] !== "hit") {
-                return false;
-            }
-        }
-        return true;
-    },
-    isGameOver: function () {
-        return this.catBoxFound === this.catBoxNum || CONTROLLER.guesses === CONTROLLER.maxGuesses();
-    },
-};
-
-const VIEW = {
-
-    imageName: 0,
-    getImage: function () {
-        if (this.imageName === 10) {
-            this.imageName = 0;
+const model = {
+    catsNum: 9,
+    catLocations: ["06", "16", "26", "24", "34", "44", "10", "11", "12"],
+    catsFound: 0,
+    catImageName: 0,
+    getCatImage: function () {
+        if (this.catImageName === 10) {
+            this.catImageName = 0;
         }
         do {
-            this.imageName++
-        } while (this.imageName > 10);
-        return `url(img/${this.imageName}.png)`;
+            this.catImageName++
+        } while (this.catImageName > 10);
+        return `url(img/${this.catImageName}.png)`;
     },
+
+};
+
+const view = {
 
     changeImageOnClick: function () {
         const tds = document.querySelectorAll("td");
         for (const td of tds) {
             td.onclick = function () {
-                MODEL.openCell(td);
+                controller.openCell(td);
             }
         }
     },
@@ -71,29 +29,56 @@ const VIEW = {
     // Now the messages are printing in console.
     // Next step they will be displayed in main page.
     displayGuesses: function () {
-        console.log(`Попытки: ${CONTROLLER.guesses} из ${CONTROLLER.maxGuesses()}`);
+        console.log(`Попытки: ${controller.guesses} из ${controller.maxGuesses()}`);
     },
-    displayBoxes: function () {
-        console.log(`Коробки: ${MODEL.catBoxFound} из ${MODEL.catBoxNum}`);
+    displayFoundCats: function () {
+        console.log(`Котиков: ${model.catsFound} из ${model.catsNum}`);
     },
     displayResult: function () {
-        if (MODEL.catBoxFound === MODEL.catBoxNum && CONTROLLER.guesses <= CONTROLLER.maxGuesses()) {
+        if (model.catsFound === model.catsNum && controller.guesses <= controller.maxGuesses()) {
             console.log("Победа!");
+        } else {
+            console.log("Упс... Тебя обыграли!");
         }
-        console.log("Упс... Тебя обыграли!");
     },
 };
 
-const CONTROLLER = {
+const controller = {
     guesses: 0,
     maxGuesses: function () {
-        return Math.ceil((MODEL.catBoxNum * MODEL.catBoxLength) * 1.5);
+        return Math.ceil(model.catsNum * 1.5);
     },
     processGuess: function () {
         do {
             this.guesses++;
         } while (this.guesses > this.maxGuesses());
     },
+    openCell: function (tag) {
+
+        if (tag.classList.contains("hit") || tag.classList.contains("miss") || this.isGameOver()) {
+            return;
+        }
+        this.processGuess();
+        view.displayGuesses();
+
+        for (let i = 0; i < model.catsNum; i++) {
+            if (model.catLocations[i] === tag.id) {
+                tag.setAttribute("class", "hit");
+                tag.style.backgroundImage = model.getCatImage();
+                model.catsFound++;
+                view.displayFoundCats();
+            }
+            if (!tag.classList.contains("hit")) {
+                tag.setAttribute("class", "miss");
+            }
+        }
+        if (this.isGameOver()) {
+            view.displayResult();
+        }
+    },
+    isGameOver: function () {
+        return model.catsFound === model.catsNum || this.guesses === this.maxGuesses();
+    },
 };
 
-VIEW.changeImageOnClick();
+view.changeImageOnClick();
