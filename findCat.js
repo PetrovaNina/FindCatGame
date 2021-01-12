@@ -1,6 +1,6 @@
 const model = {
     catsNum: 9,
-    catLocations: ["06", "16", "26", "24", "34", "44", "10", "11", "12"],
+    catLocations: [],
     catsFound: 0,
     catImageName: 0,
     getCatImage: function () {
@@ -12,7 +12,17 @@ const model = {
         } while (this.catImageName > 10);
         return `url(img/${this.catImageName}.png)`;
     },
-
+    arrangeAllCats: function () {
+        this.catLocations = [];
+        let location;
+        for (let i = 1; i <= this.catsNum; i++) {
+            do {
+                location = Math.floor(Math.random() * 49 + 1);
+            } while (this.catLocations.indexOf(String(location)) !== -1);
+            this.catLocations.push(String(location));
+        }
+        console.log(this.catLocations);
+    },
 };
 
 const view = {
@@ -46,7 +56,7 @@ const view = {
 const controller = {
     guesses: 0,
     maxGuesses: function () {
-        return Math.ceil(model.catsNum * 1.5);
+        return Math.ceil(model.catsNum * 3.5);
     },
     processGuess: function () {
         do {
@@ -79,6 +89,13 @@ const controller = {
     isGameOver: function () {
         return model.catsFound === model.catsNum || this.guesses === this.maxGuesses();
     },
+    startGame: function () {
+        const startButton = document.querySelector("button");
+        startButton.onclick = function () {
+            model.arrangeAllCats();
+        }
+    }
 };
 
+controller.startGame();
 view.changeImageOnClick();
