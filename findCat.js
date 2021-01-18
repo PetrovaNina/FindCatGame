@@ -26,6 +26,7 @@ const model = {
             }
             table.appendChild(raw);
         }
+        table.style.backgroundColor = "chocolate";
     },
     getCatImage: function () {
         if (this.catImageName === 10) {
@@ -50,6 +51,10 @@ const model = {
 };
 
 const view = {
+    removeRules: function () {
+        const rules = document.querySelector(".rules");
+        rules.remove();
+    },
 
     changeImageOnClick: function () {
         const tds = document.querySelectorAll("td");
@@ -71,12 +76,15 @@ const view = {
     displayResult: function () {
         if (model.catsFound === model.getCatsNum() && controller.guesses <= controller.maxGuesses()) {
             console.log("Победа!");
-            console.log(controller.level += 1);
+            controller.level++;
             model.boardSize++;
         } else {
             console.log("Упс... Тебя обыграли!");
         }
     },
+    // displayLevel: function () {
+    //     console.log("Уровень " + controller.level)
+    // }
 };
 
 const controller = {
@@ -125,6 +133,7 @@ const controller = {
         const startButton = document.querySelector("button");
         startButton.onclick = function () {
             self.resetGame();
+            view.removeRules();
             model.createBoard();
             model.arrangeAllCats();
             view.changeImageOnClick();
