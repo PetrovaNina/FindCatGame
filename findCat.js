@@ -1,9 +1,11 @@
 const model = {
-    catsNum: 9,
-    boardSize: 4,
+    boardSize: 3,
     catLocations: [],
     catsFound: 0,
     catImageName: 0,
+    getCatsNum: function () {
+        return this.boardSize * 2;
+    },
     makeElement: function (tagName, tagId) {
         const element = document.createElement(tagName);
         if (tagId) {
@@ -37,7 +39,7 @@ const model = {
     arrangeAllCats: function () {
         this.catLocations = [];
         let location;
-        for (let i = 1; i <= this.catsNum; i++) {
+        for (let i = 1; i <= this.getCatsNum(); i++) {
             do {
                 location = Math.floor(Math.random() * (this.boardSize * this.boardSize) + 1);
             } while (this.catLocations.indexOf(String(location)) !== -1);
@@ -64,11 +66,13 @@ const view = {
         console.log(`Попытки: ${controller.guesses} из ${controller.maxGuesses()}`);
     },
     displayFoundCats: function () {
-        console.log(`Котиков: ${model.catsFound} из ${model.catsNum}`);
+        console.log(`Котиков: ${model.catsFound} из ${model.getCatsNum()}`);
     },
     displayResult: function () {
-        if (model.catsFound === model.catsNum && controller.guesses <= controller.maxGuesses()) {
+        if (model.catsFound === model.getCatsNum() && controller.guesses <= controller.maxGuesses()) {
             console.log("Победа!");
+            console.log(controller.level += 1);
+            model.boardSize++;
         } else {
             console.log("Упс... Тебя обыграли!");
         }
@@ -77,8 +81,9 @@ const view = {
 
 const controller = {
     guesses: 0,
+    level: 1,
     maxGuesses: function () {
-        return Math.ceil(model.catsNum * 3.5);
+        return Math.ceil((model.boardSize * model.boardSize) / 1.2);
     },
     processGuess: function () {
         do {
@@ -93,7 +98,7 @@ const controller = {
         this.processGuess();
         view.displayGuesses();
 
-        for (let i = 0; i < model.catsNum; i++) {
+        for (let i = 0; i < model.getCatsNum(); i++) {
             if (model.catLocations[i] === tag.id) {
                 tag.setAttribute("class", "hit");
                 tag.style.backgroundImage = model.getCatImage();
@@ -109,11 +114,17 @@ const controller = {
         }
     },
     isGameOver: function () {
-        return model.catsFound === model.catsNum || this.guesses === this.maxGuesses();
+        return model.catsFound === model.getCatsNum() || this.guesses === this.maxGuesses();
+    },
+    resetGame: function () {
+        model.catsFound = 0;
+        this.guesses = 0;
     },
     startGame: function () {
+        const self = this;
         const startButton = document.querySelector("button");
         startButton.onclick = function () {
+            self.resetGame();
             model.createBoard();
             model.arrangeAllCats();
             view.changeImageOnClick();
