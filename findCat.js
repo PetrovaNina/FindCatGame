@@ -1,8 +1,30 @@
 const model = {
     catsNum: 9,
+    boardSize: 4,
     catLocations: [],
     catsFound: 0,
     catImageName: 0,
+    makeElement: function (tagName, tagId) {
+        const element = document.createElement(tagName);
+        if (tagId) {
+            element.id = tagId;
+        }
+        return element;
+    },
+    createBoard: function () {
+        const table = document.querySelector("table");
+        table.innerHTML = '';
+        let id = 0;
+        for (let i = 1; i <= this.boardSize; i++) {
+            const raw = this.makeElement('tr');
+            for (let j = 1; j <= this.boardSize; j++) {
+                id++;
+                const cell = this.makeElement('td', id);
+                raw.appendChild(cell);
+            }
+            table.appendChild(raw);
+        }
+    },
     getCatImage: function () {
         if (this.catImageName === 10) {
             this.catImageName = 0;
@@ -17,7 +39,7 @@ const model = {
         let location;
         for (let i = 1; i <= this.catsNum; i++) {
             do {
-                location = Math.floor(Math.random() * 49 + 1);
+                location = Math.floor(Math.random() * (this.boardSize * this.boardSize) + 1);
             } while (this.catLocations.indexOf(String(location)) !== -1);
             this.catLocations.push(String(location));
         }
@@ -92,10 +114,11 @@ const controller = {
     startGame: function () {
         const startButton = document.querySelector("button");
         startButton.onclick = function () {
+            model.createBoard();
             model.arrangeAllCats();
+            view.changeImageOnClick();
         }
     }
 };
 
 controller.startGame();
-view.changeImageOnClick();
