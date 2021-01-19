@@ -28,10 +28,13 @@ const model = {
 };
 
 const view = {
-    makeElement: function (tagName, tagId, text) {
+    makeElement: function (tagName, tagId, tagClass, text) {
         const element = document.createElement(tagName);
         if (tagId) {
             element.id = tagId;
+        }
+        if (tagClass) {
+            element.classList.add(tagClass);
         }
         if (text) {
             element.textContent = text;
@@ -75,25 +78,38 @@ const view = {
         }
     },
     getHeadingForStats: function () {
-        return view.makeElement("h2", "statHeading", "Твои успехи");
+        return view.makeElement("h2", "statHeading", "", "Твои успехи");
     },
     getLevelElement: function () {
-        return view.makeElement("p", "",`Уровень: ${controller.level}`);
+        return view.makeElement("p", "", "", `Уровень: ${controller.level}`);
     },
     getGuessesElement: function () {
-        return view.makeElement("p", "",`Попытки: ${controller.guesses} из ${controller.maxGuesses()}`);
+        return view.makeElement("p", "", "", `Попытки: ${controller.guesses} из ${controller.maxGuesses()}`);
     },
     getFoundCatsElement: function () {
-        return view.makeElement("p", "",`Котиков: ${model.catsFound} из ${model.getCatsNum()}`);
+        return view.makeElement("p", "", "", `Котиков: ${model.catsFound} из ${model.getCatsNum()}`);
     },
     getGameResultElement: function () {
         let string;
+        let elementClass;
         if (model.catsFound === model.getCatsNum() && controller.guesses <= controller.maxGuesses()) {
             string = "Победа!";
+            elementClass = "win";
         } else {
             string = "Упс... Тебя обыграли!";
+            elementClass = "lose";
         }
-        return view.makeElement("p", "userResult", string);
+        return view.makeElement("p", "userResult", elementClass, string);
+    },
+    getContinueButton: function () {
+        let buttonName;
+        const result = document.getElementById("userResult");
+        if (result.classList.contains("win")) {
+            buttonName = "Продолжить игру";
+        } else {
+            buttonName = "Взять реванш";
+        }
+        return view.makeElement("button", "continue-button", "", buttonName);
     },
     displayStats: function () {
         const stats = document.querySelector(".game-statistics");
@@ -106,9 +122,10 @@ const view = {
         );
         if (controller.isGameOver()) {
             stats.appendChild(this.getGameResultElement());
+            stats.appendChild(this.getContinueButton());
+            controller.playGame();
         }
     },
-
 };
 
 const controller = {
@@ -150,7 +167,7 @@ const controller = {
         model.catsFound = 0;
         this.guesses = 0;
     },
-    startGame: function () {
+    playGame: function () {
         const self = this;
         const startButton = document.querySelector("button");
 
@@ -159,9 +176,9 @@ const controller = {
             view.removeRules();
             const result = document.getElementById("userResult");
             if (result !== null) {
-                if (result.innerText === "Победа!") {
-                controller.level++;
-                model.boardSize++;
+                if (result.classList.contains("win")) {
+                    controller.level++;
+                    model.boardSize++;
                 }
             }
             view.removeStats();
@@ -170,7 +187,7 @@ const controller = {
             model.arrangeAllCats();
             view.changeImageOnClick();
         }
-    }
+    },
 };
 
-controller.startGame();
+controller.playGame();
