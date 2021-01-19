@@ -6,28 +6,6 @@ const model = {
     getCatsNum: function () {
         return this.boardSize * 2;
     },
-    makeElement: function (tagName, tagId) {
-        const element = document.createElement(tagName);
-        if (tagId) {
-            element.id = tagId;
-        }
-        return element;
-    },
-    createBoard: function () {
-        const table = document.querySelector("table");
-        table.innerHTML = '';
-        let id = 0;
-        for (let i = 1; i <= this.boardSize; i++) {
-            const raw = this.makeElement('tr');
-            for (let j = 1; j <= this.boardSize; j++) {
-                id++;
-                const cell = this.makeElement('td', id);
-                raw.appendChild(cell);
-            }
-            table.appendChild(raw);
-        }
-        table.style.backgroundColor = "chocolate";
-    },
     getCatImage: function () {
         if (this.catImageName === 10) {
             this.catImageName = 0;
@@ -46,16 +24,48 @@ const model = {
             } while (this.catLocations.indexOf(String(location)) !== -1);
             this.catLocations.push(String(location));
         }
-        console.log(this.catLocations);
     },
 };
 
 const view = {
+    makeElement: function (tagName, tagId, text) {
+        const element = document.createElement(tagName);
+        if (tagId) {
+            element.id = tagId;
+        }
+        if (text) {
+            element.textContent = text;
+        }
+        return element;
+    },
+    createBoard: function () {
+        const table = document.querySelector("table");
+        table.innerHTML = '';
+        let id = 0;
+        for (let i = 1; i <= model.boardSize; i++) {
+            const raw = this.makeElement('tr');
+            for (let j = 1; j <= model.boardSize; j++) {
+                id++;
+                const cell = this.makeElement('td', id);
+                raw.appendChild(cell);
+            }
+            table.appendChild(raw);
+        }
+        table.style.backgroundColor = "chocolate";
+    },
     removeRules: function () {
         const rules = document.querySelector(".rules");
+        if (rules === null) {
+            return;
+        }
         rules.remove();
     },
-
+    removeStats: function () {
+        const stats = document.querySelector(".game-statistics");
+        if (stats.innerHTML !== null) {
+            stats.innerHTML = "";
+        }
+    },
     changeImageOnClick: function () {
         const tds = document.querySelectorAll("td");
         for (const td of tds) {
@@ -64,27 +74,41 @@ const view = {
             }
         }
     },
-
-    // Now the messages are printing in console.
-    // Next step they will be displayed in main page.
-    displayGuesses: function () {
-        console.log(`Попытки: ${controller.guesses} из ${controller.maxGuesses()}`);
+    getHeadingForStats: function () {
+        return view.makeElement("h2", "statHeading", "Твои успехи");
     },
-    displayFoundCats: function () {
-        console.log(`Котиков: ${model.catsFound} из ${model.getCatsNum()}`);
+    getLevelElement: function () {
+        return view.makeElement("p", "",`Уровень: ${controller.level}`);
     },
-    displayResult: function () {
+    getGuessesElement: function () {
+        return view.makeElement("p", "",`Попытки: ${controller.guesses} из ${controller.maxGuesses()}`);
+    },
+    getFoundCatsElement: function () {
+        return view.makeElement("p", "",`Котиков: ${model.catsFound} из ${model.getCatsNum()}`);
+    },
+    getGameResultElement: function () {
+        let string;
         if (model.catsFound === model.getCatsNum() && controller.guesses <= controller.maxGuesses()) {
-            console.log("Победа!");
-            controller.level++;
-            model.boardSize++;
+            string = "Победа!";
         } else {
-            console.log("Упс... Тебя обыграли!");
+            string = "Упс... Тебя обыграли!";
+        }
+        return view.makeElement("p", "userResult", string);
+    },
+    displayStats: function () {
+        const stats = document.querySelector(".game-statistics");
+
+        stats.append(
+            this.getHeadingForStats(),
+            this.getLevelElement(),
+            this.getGuessesElement(),
+            this.getFoundCatsElement()
+        );
+        if (controller.isGameOver()) {
+            stats.appendChild(this.getGameResultElement());
         }
     },
-    // displayLevel: function () {
-    //     console.log("Уровень " + controller.level)
-    // }
+
 };
 
 const controller = {
@@ -104,21 +128,19 @@ const controller = {
             return;
         }
         this.processGuess();
-        view.displayGuesses();
 
         for (let i = 0; i < model.getCatsNum(); i++) {
             if (model.catLocations[i] === tag.id) {
                 tag.setAttribute("class", "hit");
                 tag.style.backgroundImage = model.getCatImage();
                 model.catsFound++;
-                view.displayFoundCats();
             }
             if (!tag.classList.contains("hit")) {
                 tag.setAttribute("class", "miss");
             }
-        }
-        if (this.isGameOver()) {
-            view.displayResult();
+
+            view.removeStats();
+            view.displayStats();
         }
     },
     isGameOver: function () {
@@ -131,10 +153,20 @@ const controller = {
     startGame: function () {
         const self = this;
         const startButton = document.querySelector("button");
+
         startButton.onclick = function () {
             self.resetGame();
             view.removeRules();
-            model.createBoard();
+            const result = document.getElementById("userResult");
+            if (result !== null) {
+                if (result.innerText === "Победа!") {
+                controller.level++;
+                model.boardSize++;
+                }
+            }
+            view.removeStats();
+            view.createBoard();
+            view.displayStats();
             model.arrangeAllCats();
             view.changeImageOnClick();
         }
