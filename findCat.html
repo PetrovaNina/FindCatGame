@@ -1,24 +1,42 @@
 <!doctype html>
-<html lang="en">
+<html lang="ru">
+
 <head>
-<meta charset="utf-8">
-<title>Кошачьи прятки!</title>
-<link rel="stylesheet" href="findCat.css">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Кошачьи прятки!</title>
+    <link rel="stylesheet" href="findCat.css">
 </head>
+
 <body>
-<div>
-    <div class="header">
-        <h1>Кошачьи прятки!</h1>
-        <p>Игра для любителей мурчащих</p>
+    <div class="wrapper">
+        <header class="header">
+            <h1 class="header-heading">Кошачьи прятки!</h1>
+            <p class="header-slogan">Игра для любителей мурчащих</p>
+        </header>
+        <div class="rules">
+            <div class="rules-wrapper">
+                <p class="rules-desctiption">Котята закрылись в коробках, разбросанных по игровому полю.
+                    Найди их всех, чтобы победить пушистую команду.
+                </p>
+                <button>Играть 😺</button>
+            </div>
+        </div>
+        <div class="game-wrapper">
+            <div class="game-container">
+                <section class="game">
+                    <div class="table-wrapper">
+                        <table class="gameboard"></table> 
+                    </div>
+                    <div class="game-statistics"></div>
+                </section>
+            </div>
+        </div>
+        <footer>
+            By <a href="https://petrovanina.github.io/Portfolio/" target="_blank">Nina Petrova</a>
+        </footer>
     </div>
-    <p class="rules">Котята закрылись в коробках, разбросанных по игровому полю.
-        <br> Найди их всех, чтобы победить пушистую команду.</p>
-    <button>Играть 😺</button>
-    <section class="game">
-        <table class="gameboard"></table>
-        <div class="game-statistics"></div>
-    </section>
-</div>
-<script src="findCat.js"></script>
+    <script src="findCat.js"></script>
 </body>
+
 </html>

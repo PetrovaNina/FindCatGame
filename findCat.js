@@ -54,7 +54,7 @@ const view = {
             }
             table.appendChild(raw);
         }
-        table.style.backgroundColor = "chocolate";
+        table.style.display = "table";
     },
     removeRules: function () {
         const rules = document.querySelector(".rules");
