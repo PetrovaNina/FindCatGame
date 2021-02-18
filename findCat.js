@@ -105,7 +105,7 @@ const view = {
         let buttonName;
         const result = document.getElementById("userResult");
         if (result.classList.contains("win")) {
-            buttonName = "Продолжить игру";
+            buttonName = "Играть дальше";
         } else {
             buttonName = "Взять реванш";
         }
@@ -186,6 +186,9 @@ const controller = {
             view.displayStats();
             model.arrangeAllCats();
             view.changeImageOnClick();
+
+            document.querySelector(".game-wrapper").style.flexGrow  = "2";
+            document.querySelector(".game").style.minHeight  = "80vh";
         }
     },
 };

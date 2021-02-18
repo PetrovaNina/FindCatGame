@@ -2,7 +2,7 @@
     font-family: 'Comfortaa';
     font-style: normal;
     font-weight: 400;
-    src: url(https://fonts.gstatic.com/s/comfortaa/v30/1Pt_g8LJRfWJmhDAuUsSQamb1W0lwk4S4WjMDrcfIA9c.woff2) 
+    src: url(https://fonts.gstatic.com/s/comfortaa/v30/1Pt_g8LJRfWJmhDAuUsSQamb1W0lwk4S4WjMDrcfIA9c.woff2)
     format('woff2');
     unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
 }
@@ -79,9 +79,9 @@ button {
 }
 
 .game-container {
-    max-width: 1130px;
+    max-width: 1230px;
     margin: 0 auto;
-    padding: 0 15px;
+    padding: 15px;
     text-align: center;
 }
 
@@ -90,32 +90,18 @@ button {
     justify-content: space-evenly;
 }
 
-@media screen and (max-width: 873px) {
-    .game {
-        display: block;
-    }
-}
-
 .table-wrapper {
     min-width: 35vw;
 }
 
 table {
     display: none;
-    margin: 1em auto;
     padding: 5px;
     width: 100%;
     min-height: 35vw;
     border-spacing: 0;
     border-radius: 2%;
     background-color: #ffd299;
-}
-
-@media screen and (max-width: 873px) {
-    table {
-        width: 90vw;
-        height: 90vw;
-    }
 }
 
 td {
@@ -147,7 +133,6 @@ td:hover {
 }
 
 .game-statistics {
-    margin-top: 1em;
     min-width: 40%;
     text-align: center;
     font-weight: 800;
@@ -155,27 +140,8 @@ td:hover {
 }
 
 .game-statistics #userResult {
-    font-size: 1.5em;
+    font-size: 1.4em;
     line-height: 1.4em;
-}
-
-@media screen and (max-width: 424px) {
-    .game-wrapper {
-        margin-top: 0;
-    }
-    .header-slogan {
-        margin-top: 5px;
-        line-height: 1em;
-    }
-    footer,
-    .game-statistics {
-        font-size: 0.8em;
-        line-height: 0.5em;
-    }
-    .header-heading, .game-statistics #userResult, .game-statistics h2 {
-        font-size: 1.2em;
-        line-height: 1em;
-    }
 }
 
 footer {
@@ -185,4 +151,61 @@ footer {
 
 footer a {
     color: #ffffff;
+}
+
+@media screen and (max-width: 769px) {
+    .game {
+        flex-direction: column-reverse;
+    }
+    table {
+        width: 91vw;
+        height: 91vw;
+        margin: 0 auto;
+    }
+    .header-heading {
+        font-size: 1.2em;
+        margin-top: 0;
+    }
+    .header-slogan {
+        margin-bottom: 0.6em;
+        font-size: 0.8em;
+        line-height: 1em;
+    }
+    .game-statistics {
+        font-size: 1em;
+        line-height: 0.7em;
+    }
+    #statHeading {
+        font-size: 1.2em;
+        line-height: 1.2em;
+    }
+    #userResult {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        margin: 0;
+        padding-top: 40vh;
+        background-color: rgba(255, 255, 255, 0.822);
+    }
+    #continue-button {
+        position: absolute;
+        top: 47vh;
+        left: 0;
+        width: 55vw;
+        margin: 0 22.5vw;
+        line-height: 1.5em;
+    }
+}
+
+@media screen and (max-width: 570px) {
+    footer,
+    .game-statistics {
+        font-size: 0.8em;
+        line-height: 0.7em;
+    }
+    #statHeading {
+        margin-top: 0;
+    }
 }
