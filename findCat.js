@@ -46,15 +46,14 @@ const view = {
         table.innerHTML = '';
         let id = 0;
         for (let i = 1; i <= model.boardSize; i++) {
-            const raw = this.makeElement('tr');
+            const raw = this.makeElement("tr");
             for (let j = 1; j <= model.boardSize; j++) {
                 id++;
-                const cell = this.makeElement('td', id);
+                const cell = this.makeElement("td", id, "gameboard-cell");
                 raw.appendChild(cell);
             }
             table.appendChild(raw);
         }
-        table.style.display = "table";
     },
     removeRules: function () {
         const rules = document.querySelector(".rules");
@@ -148,12 +147,12 @@ const controller = {
 
         for (let i = 0; i < model.getCatsNum(); i++) {
             if (model.catLocations[i] === tag.id) {
-                tag.setAttribute("class", "hit");
+                tag.setAttribute("class", "gameboard-cell hit");
                 tag.style.backgroundImage = model.getCatImage();
                 model.catsFound++;
             }
             if (!tag.classList.contains("hit")) {
-                tag.setAttribute("class", "miss");
+                tag.setAttribute("class", "gameboard-cell miss");
             }
 
             view.removeStats();
@@ -187,8 +186,7 @@ const controller = {
             model.arrangeAllCats();
             view.changeImageOnClick();
 
-            document.querySelector(".game-wrapper").style.flexGrow  = "2";
-            document.querySelector(".game").style.minHeight  = "80vh";
+            document.querySelector(".game-container").style.display = "block";
         }
     },
 };

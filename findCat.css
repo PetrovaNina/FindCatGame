@@ -77,63 +77,50 @@ button {
     border-radius: 0.5em;
     border: none;
 }
-
 .game-container {
-    max-width: 1230px;
-    margin: 0 auto;
-    padding: 15px;
-    text-align: center;
+    display: none;
 }
 
 .game {
     display: flex;
+    max-width: 1400px;
+    margin: auto;
+    padding: 15px;
+    text-align: center;
     justify-content: space-evenly;
 }
 
-.table-wrapper {
-    min-width: 35vw;
-}
-
-table {
-    display: none;
+.gameboard {
     padding: 5px;
-    width: 100%;
+    min-width: 35vw;
     min-height: 35vw;
     border-spacing: 0;
     border-radius: 2%;
     background-color: #ffd299;
 }
 
-td {
+.gameboard-cell {
     background-color: #e69341;
     border: 2px solid #ffd299;
 }
 
-td:hover {
+.gameboard-cell:hover {
     filter: brightness(95%) contrast(95%);
 }
 
-.hit {
+.gameboard-cell.hit {
     background-repeat: no-repeat;
     background-position: center;
     background-size: 90%;
     background-color: #be5a2d;
 }
 
-.miss {
+.gameboard-cell.miss {
     background-color: #be5a2d;
 }
 
-.win {
-    color: #00643c;
-}
-
-.lose {
-    color: #e4222f;
-}
-
 .game-statistics {
-    min-width: 40%;
+    min-width: 33%;
     text-align: center;
     font-weight: 800;
     font-size: 1.3em;
@@ -144,6 +131,14 @@ td:hover {
     line-height: 1.4em;
 }
 
+#userResult.win {
+    color: #00643c;
+}
+
+#userResult.lose {
+    color: #e4222f;
+}
+
 footer {
     padding: 10px 0;
     text-transform: none;
@@ -152,16 +147,7 @@ footer {
 footer a {
     color: #ffffff;
 }
-
-@media screen and (max-width: 769px) {
-    .game {
-        flex-direction: column-reverse;
-    }
-    table {
-        width: 91vw;
-        height: 91vw;
-        margin: 0 auto;
-    }
+@media screen and (max-width: 1025px) {
     .header-heading {
         font-size: 1.2em;
         margin-top: 0;
@@ -174,6 +160,18 @@ footer a {
     .game-statistics {
         font-size: 1em;
         line-height: 0.7em;
+    }
+}
+@media screen and (max-width: 769px) {
+    .game {
+        flex-direction: column-reverse;
+        align-items: center;
+        min-height: 80vh;
+    }
+    table {
+        width: 91vw;
+        height: 91vw;
+        margin: 0 auto;
     }
     #statHeading {
         font-size: 1.2em;
