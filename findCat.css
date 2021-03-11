@@ -246,7 +246,7 @@ footer a {
         margin: 0;
         padding-top: 40vh;
         background-color: rgba(255, 255, 255, 0.822);
-        z-index: 1;
+        z-index: 2;
     }
     #continue-button {
         position: absolute;
@@ -255,7 +255,7 @@ footer a {
         width: 55vw;
         margin: 0 22.5vw;
         line-height: 1.5em;
-        z-index: 2;
+        z-index: 3;
     }
     footer,
     .game-statistics {
