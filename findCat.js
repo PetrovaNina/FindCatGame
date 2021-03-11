@@ -3,10 +3,10 @@ const model = {
     catLocations: [],
     catsFound: 0,
     catImageName: 0,
-    getCatsNum: function () {
+    getCatsNum: function() {
         return this.boardSize * 2;
     },
-    getCatImage: function () {
+    getCatImage: function() {
         if (this.catImageName === 10) {
             this.catImageName = 0;
         }
@@ -15,7 +15,7 @@ const model = {
         } while (this.catImageName > 10);
         return `url(img/${this.catImageName}.png)`;
     },
-    arrangeAllCats: function () {
+    arrangeAllCats: function() {
         this.catLocations = [];
         let location;
         for (let i = 1; i <= this.getCatsNum(); i++) {
@@ -28,7 +28,7 @@ const model = {
 };
 
 const view = {
-    makeElement: function (tagName, tagId, tagClass, text) {
+    makeElement: function(tagName, tagId, tagClass, text) {
         const element = document.createElement(tagName);
         if (tagId) {
             element.id = tagId;
@@ -41,7 +41,7 @@ const view = {
         }
         return element;
     },
-    createBoard: function () {
+    createBoard: function() {
         const table = document.querySelector("table");
         table.innerHTML = '';
         let id = 0;
@@ -55,40 +55,40 @@ const view = {
             table.appendChild(raw);
         }
     },
-    removeRules: function () {
+    removeRules: function() {
         const rules = document.querySelector(".rules");
         if (rules === null) {
             return;
         }
         rules.remove();
     },
-    removeStats: function () {
+    removeStats: function() {
         const stats = document.querySelector(".game-statistics");
         if (stats.innerHTML !== null) {
             stats.innerHTML = "";
         }
     },
-    changeImageOnClick: function () {
+    changeImageOnClick: function() {
         const tds = document.querySelectorAll("td");
         for (const td of tds) {
-            td.onclick = function () {
+            td.onclick = function() {
                 controller.openCell(td);
             }
         }
     },
-    getHeadingForStats: function () {
+    getHeadingForStats: function() {
         return view.makeElement("h2", "statHeading", "", "Твои успехи");
     },
-    getLevelElement: function () {
+    getLevelElement: function() {
         return view.makeElement("p", "", "", `Уровень: ${controller.level}`);
     },
-    getGuessesElement: function () {
+    getGuessesElement: function() {
         return view.makeElement("p", "", "", `Попытки: ${controller.guesses} из ${controller.maxGuesses()}`);
     },
-    getFoundCatsElement: function () {
+    getFoundCatsElement: function() {
         return view.makeElement("p", "", "", `Котиков: ${model.catsFound} из ${model.getCatsNum()}`);
     },
-    getGameResultElement: function () {
+    getGameResultElement: function() {
         let string;
         let elementClass;
         if (model.catsFound === model.getCatsNum() && controller.guesses <= controller.maxGuesses()) {
@@ -100,7 +100,7 @@ const view = {
         }
         return view.makeElement("p", "userResult", elementClass, string);
     },
-    getContinueButton: function () {
+    getContinueButton: function() {
         let buttonName;
         const result = document.getElementById("userResult");
         if (result.classList.contains("win")) {
@@ -110,7 +110,7 @@ const view = {
         }
         return view.makeElement("button", "continue-button", "", buttonName);
     },
-    displayStats: function () {
+    displayStats: function() {
         const stats = document.querySelector(".game-statistics");
 
         stats.append(
@@ -130,15 +130,15 @@ const view = {
 const controller = {
     guesses: 0,
     level: 1,
-    maxGuesses: function () {
+    maxGuesses: function() {
         return Math.ceil((model.boardSize * model.boardSize) / 1.2);
     },
-    processGuess: function () {
+    processGuess: function() {
         do {
             this.guesses++;
         } while (this.guesses > this.maxGuesses());
     },
-    openCell: function (tag) {
+    openCell: function(tag) {
 
         if (tag.classList.contains("hit") || tag.classList.contains("miss") || this.isGameOver()) {
             return;
@@ -159,18 +159,18 @@ const controller = {
             view.displayStats();
         }
     },
-    isGameOver: function () {
+    isGameOver: function() {
         return model.catsFound === model.getCatsNum() || this.guesses === this.maxGuesses();
     },
-    resetGame: function () {
+    resetGame: function() {
         model.catsFound = 0;
         this.guesses = 0;
     },
-    playGame: function () {
+    playGame: function() {
         const self = this;
         const startButton = document.querySelector("button");
 
-        startButton.onclick = function () {
+        startButton.onclick = function() {
             self.resetGame();
             view.removeRules();
             const result = document.getElementById("userResult");
@@ -186,7 +186,7 @@ const controller = {
             model.arrangeAllCats();
             view.changeImageOnClick();
 
-            document.querySelector(".game-container").style.display = "block";
+            document.querySelector(".game-container").style.display = "flex";
         }
     },
 };
