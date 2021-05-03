@@ -147,8 +147,8 @@ const controller = {
 
         for (let i = 0; i < model.getCatsNum(); i++) {
             if (model.catLocations[i] === tag.id) {
-                tag.setAttribute("class", "gameboard-cell hit");
                 tag.style.backgroundImage = model.getCatImage();
+                tag.setAttribute("class", "gameboard-cell hit");
                 model.catsFound++;
             }
             if (!tag.classList.contains("hit")) {
